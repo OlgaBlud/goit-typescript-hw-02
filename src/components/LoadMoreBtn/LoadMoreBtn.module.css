@@ -1,0 +1,10 @@
+.loadBtn {
+  min-width: 100px;
+  display: block;
+  margin: 0 auto;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: darkred;
+  color: antiquewhite;
+}
