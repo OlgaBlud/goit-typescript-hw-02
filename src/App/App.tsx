@@ -1,25 +1,47 @@
 import { useEffect, useState } from "react";
 import "./App.css";
-import SearchBar from "./components/SearchBar/SearchBar";
-import { getPhotos } from "./images-api";
-import ImageGallery from "./components/ImageGallery/ImageGallery";
-import LoadMoreBtn from "./components/LoadMoreBtn/LoadMoreBtn";
-import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
-import Loader from "./components/Loader/Loader";
+import SearchBar from "../components/SearchBar/SearchBar";
+import { getPhotos } from "../images-api";
+import ImageGallery from "../components/ImageGallery/ImageGallery";
+import LoadMoreBtn from "../components/LoadMoreBtn/LoadMoreBtn";
+import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
+import Loader from "../components/Loader/Loader";
 import toast, { Toaster } from "react-hot-toast";
-import ImageModal from "./components/ImageModal/ImageModal";
+import ImageModal from "../components/ImageModal/ImageModal";
 
 function App() {
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [images, setImages] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [isEmpty, setIsEmpty] = useState(false);
-  const [nextPage, setNextPage] = useState(false);
-  const [modal, setModal] = useState({ isOpen: false, imgUrl: "", imgAlt: "" });
+  interface Modal {
+    isOpen: boolean;
+    imgUrl: string;
+    imgAlt: string;
+  }
+  interface Image {
+    id: string;
+    description: string | null;
+    urls: {
+      small: string;
+      regular: string;
+    };
+  }
+  interface Response {
+    results: Image[];
+    total: number;
+    total_pages: number;
+  }
+  const [query, setQuery] = useState<string>("");
+  const [page, setPage] = useState<number>(1);
+  const [images, setImages] = useState<Image[]>([]);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isEmpty, setIsEmpty] = useState<boolean>(false);
+  const [nextPage, setNextPage] = useState<boolean>(false);
+  const [modal, setModal] = useState<Modal>({
+    isOpen: false,
+    imgUrl: "",
+    imgAlt: "",
+  });
 
-  const handleSubmit = (searchValue) => {
+  const handleSubmit = (searchValue: string): void => {
     setQuery(searchValue);
     setImages([]);
     setPage(1);
@@ -35,7 +57,10 @@ function App() {
       setLoading(true);
       setError(null);
       try {
-        const { results, total, total_pages } = await getPhotos(query, page);
+        const { results, total, total_pages }: Response = await getPhotos(
+          query,
+          page
+        );
 
         if (!total) {
           setIsEmpty(true);
@@ -52,7 +77,7 @@ function App() {
         setImages((prevImages) => [...prevImages, ...results]);
         setNextPage(page < total_pages);
       } catch (error) {
-        setError(error.message);
+        setError((error as Error).message);
       } finally {
         setLoading(false);
       }
@@ -60,14 +85,14 @@ function App() {
     fetchImages();
   }, [query, page]);
 
-  const handleLoadMoreClick = () => {
+  const handleLoadMoreClick = (): void => {
     setPage((prevPage) => prevPage + 1);
   };
-  const openModal = (url, alt) => {
+  const openModal = (url: string, alt: string): void => {
     setModal({ ...modal, isOpen: true, imgUrl: url, imgAlt: alt });
   };
 
-  const closeModal = () => {
+  const closeModal = (): void => {
     setModal({ ...modal, isOpen: false, imgUrl: "", imgAlt: "" && "noAlt" });
   };
 

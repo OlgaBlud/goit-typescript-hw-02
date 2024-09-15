@@ -1,5 +1,11 @@
 import css from "./ImageCard.module.css";
-const ImageCard = ({ description, small, regular, openModal }) => {
+type Props = {
+  description: string;
+  small: string;
+  regular: string;
+};
+const ImageCard = ({ description, small, regular, openModal }: Props) => {
+  // console.log(openModal);
   return (
     <img
       className={css.image}
