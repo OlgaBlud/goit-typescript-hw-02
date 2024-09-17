@@ -9,8 +9,12 @@ interface SearchBarProps {
 const SearchBar: React.FC<SearchBarProps> = ({ onSubmit }) => {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const form = event.target;
-    const query = form.elements.query.value.trim();
+    const form = event.target as HTMLFormElement;
+
+    const query = (
+      form.elements.namedItem("query") as HTMLInputElement
+    ).value.trim();
+
     if (!query) {
       const notify = () =>
         toast("Enter search query!", {

@@ -8,26 +8,9 @@ import ErrorMessage from "../components/ErrorMessage/ErrorMessage";
 import Loader from "../components/Loader/Loader";
 import toast, { Toaster } from "react-hot-toast";
 import ImageModal from "../components/ImageModal/ImageModal";
+import { Image, Modal, Response } from "../types";
 
 function App() {
-  interface Modal {
-    isOpen: boolean;
-    imgUrl: string;
-    imgAlt: string;
-  }
-  interface Image {
-    id: string;
-    description: string | null;
-    urls: {
-      small: string;
-      regular: string;
-    };
-  }
-  interface Response {
-    results: Image[];
-    total: number;
-    total_pages: number;
-  }
   const [query, setQuery] = useState<string>("");
   const [page, setPage] = useState<number>(1);
   const [images, setImages] = useState<Image[]>([]);

@@ -1,17 +1,19 @@
+import { Image } from "../../types";
 import css from "./ImageCard.module.css";
-type Props = {
-  description: string;
-  small: string;
-  regular: string;
-};
-const ImageCard = ({ description, small, regular, openModal }: Props) => {
-  // console.log(openModal);
+interface ImageCardProps extends Pick<Image, "description" | "urls"> {
+  openModal: (regular: string, description: string) => void;
+}
+const ImageCard: React.FC<ImageCardProps> = ({
+  description,
+  urls,
+  openModal,
+}) => {
   return (
     <img
       className={css.image}
-      src={small}
+      src={urls.small}
       alt={description}
-      onClick={() => openModal(regular, description)}
+      onClick={() => openModal(urls.regular, description)}
     />
   );
 };
